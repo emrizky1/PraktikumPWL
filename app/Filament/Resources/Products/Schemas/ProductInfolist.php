@@ -3,6 +3,11 @@
 namespace App\Filament\Resources\Products\Schemas;
 
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Support\Icons\Heroicon;
 
 class ProductInfolist
 {
@@ -10,7 +15,66 @@ class ProductInfolist
     {
         return $schema
             ->components([
-                //
+                Section::make('Product Info')
+                    ->description('')
+                    ->schema([
+                        TextEntry::make('name')
+                            ->label('Product Name')
+                            ->weight('bold')
+                            ->color('primary'),
+                        TextEntry::make('id')
+                            ->label('Product ID'),
+                        TextEntry::make('sku')
+                            ->label('Product SKU')
+                            ->badge()
+                            ->color('danger'),
+                        TextEntry::make('description')
+                            ->label('Product Description'),
+                        TextEntry::make('created_at')
+                            ->label('Product Creating Date')
+                            ->date('d M Y')
+                            ->color('info'),
+                    ])
+                ->columnSpanFull(),
+                Section::make('Product Price and Stock')
+                    ->description('')
+                    ->schema([
+                        TextEntry::make('price')
+                            ->label('Product Price')
+                            ->weight('bold')
+                            ->color('primary')
+                            ->icon('heroicon-s-currency-dollar')
+                            ->formatStateUsing(fn (string $state): string => ("Rp. {$state}")),
+                        TextEntry::make('stock')
+                            ->label('Product Stock')
+                            ->icon('heroicon-s-circle-stack'),
+                    ])
+                ->columnSpanFull(),
+                Section::make('Image and Status')
+                    ->description('')
+                    ->schema([
+                        ImageEntry::make('image')
+                            ->label('Product Image')
+                            ->disk('public'),
+                        TextEntry::make('price')
+                            ->label('Product Price')
+                            ->weight('bold')
+                            ->color('primary')
+                            ->formatStateUsing(fn (string $state): string => ("Rp. {$state}"))
+                            ->icon('heroicon-s-currency-dollar'),
+                        TextEntry::make('stock')
+                            ->label('Product Stock')
+                            ->weight('bold')
+                            ->icon('heroicon-s-circle-stack')
+                            ->color('primary'),
+                        IconEntry::make('is_active')
+                            ->label('Is Active?')
+                            ->boolean(),
+                        IconEntry::make('is_featured')
+                            ->label('Is Featured?')
+                            ->boolean(),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 }
