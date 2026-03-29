@@ -28,13 +28,21 @@ class PostForm
                     ->schema([
                         Group::make([
                             TextInput::make("title")
-                                ->minLength(5),
+                                ->rules(["required",  "min:5", "max:255"]),
                             TextInput::make("slug")
-                                ->unique(),
+                                ->rules('required | min:3')
+                                ->unique()
+                                ->validationMessages([
+                                    "unique" => "Slug must be unique."
+                                ]),
                             Select::make("category_id")
                                 ->relationship("category", "name")
                                 ->preload()
-                                ->searchable(),
+                                ->required()
+                                ->searchable()
+                                ->validationMessages([
+                                    "required" => "The category field is required."
+                                ]),
                             ColorPicker::make("color"),
                         ])->columns(2),
                         
@@ -47,7 +55,11 @@ class PostForm
                         ->schema([
                             FileUpload::make("image")
                                 ->disk("public")
-                                ->directory("posts"),
+                                ->required()
+                                ->directory("posts")
+                                ->validationMessages([
+                                    "required" => "The image field is required."
+                                ]),
                         ]),
 
                         Section::make("Meta Information")
