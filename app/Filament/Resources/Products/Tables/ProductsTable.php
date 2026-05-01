@@ -17,10 +17,14 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('sku'),
-                TextColumn::make('price'),
-                TextColumn::make('stock'),
+                TextColumn::make('name')
+                    ->sortable(),
+                TextColumn::make('sku')
+                    ->sortable(),
+                TextColumn::make('price')
+                    ->sortable(),
+                TextColumn::make('stock')
+                    ->sortable(),
                 ImageColumn::make('image')
                     ->disk('public'),
                 TextColumn::make('is_active')
@@ -31,7 +35,11 @@ class ProductsTable
                     '0' => 'danger',
                 })
                 ->formatStateUsing(fn (string $state): string => $state === '1' ? 'Active' : 'Inactive'),
-            ])
+                TextColumn::make('created_at')
+                    ->Label('Created at')
+                    ->dateTime()
+                    ->sortable(),
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

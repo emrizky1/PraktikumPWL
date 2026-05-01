@@ -14,6 +14,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Components\Group;
+use App\Models\Category;
 
 
 class PostForm
@@ -37,7 +38,8 @@ class PostForm
                                 ]),
                             Select::make("category_id")
                                 ->relationship("category", "name")
-                                ->preload()
+                                ->options(Category::all()->pluck("name", "id"))
+                                // ->preload()
                                 ->required()
                                 ->searchable()
                                 ->validationMessages([
@@ -65,7 +67,10 @@ class PostForm
                         Section::make("Meta Information")
                         ->icon(Heroicon::DocumentArrowDown)
                         ->schema([
-                            TagsInput::make("tags"),
+                            Select::make("tags")
+                                ->relationship("tags", "name")
+                                ->multiple()
+                                ->preload(),
                             Checkbox::make("published"),
                             DateTimePicker::make("published_at"),
                         ]),                        
